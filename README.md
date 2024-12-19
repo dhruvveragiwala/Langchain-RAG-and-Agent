@@ -91,7 +91,7 @@ ollama pull nomic-embed-text
 ### 1. Clone the repository
 Clone the repository on your system
 ```
-git clone https://github.com/yash-1807/langchain-rag-agent.git
+git clone https://github.com/dhruvveragiwala/Langchain-RAG-and-Agent.git
 ```
 ### 2. Install dependencies
  Run this command to install dependenies in the `requirements.txt` file. 

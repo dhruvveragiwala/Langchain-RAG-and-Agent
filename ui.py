@@ -1,6 +1,7 @@
 import gradio as gr
 from query_data import query_llm
 from query_data import query_rag
+from primary_agent import query_rag_agent
 
 def create_chat_interface(fn, placeholder, title, description, examples=None):
     """
@@ -85,6 +86,33 @@ def create_chat_interfacee(fn, placeholder, title, description, examples=None):
         allow_flagging="never",  # Optional, can be removed if not needed
     )
 
+
+def create_chat_interface3(fn, placeholder, title, description, examples=None):
+    """
+    Function to create a professional and clean chat interface.
+    
+    Parameters:
+    - fn (function): The function to handle user queries.
+    - placeholder (str): Placeholder text for the input textbox.
+    - title (str): Title of the interface.
+    - description (str): Description of the interface.
+    - examples (list, optional): List of example queries for users.
+    
+    Returns:
+    - gr.Interface: The Gradio interface object.
+    """
+    return gr.Interface(
+        fn=fn,
+        inputs=gr.Textbox(placeholder=placeholder, container=False, scale=7),
+        outputs=gr.Chatbot(height=300, type="messages"),  # Updated to 'messages' format
+        title=title,
+        description=description,
+        theme="soft",
+        examples=examples,
+        cache_examples=True,
+        allow_flagging="never",  # Optional, can be removed if not needed
+    )
+
 # Define the interfaces
 basic_interface = create_chat_interfacee(
     fn=query_llm,
@@ -100,10 +128,17 @@ rag_interface = create_chat_interface(
     description="Interact with the LLM that incorporates retrieval-augmented generation (RAG).",
 )
 
+agent_interface = create_chat_interface3(
+    fn=query_rag_agent,
+    placeholder="Ask the agent to perform a task (Currently supports SQL Injection testing).",
+    title="SBI-CS-GPT 0.1 - Task Agent",
+    description="Engage with an agent capable of performing specific tasks, such as testing sites for SQL injections.",
+)   
+
 # Combine all interfaces into a tabbed layout for easy navigation
-demo = gr.TabbedInterface([basic_interface, rag_interface], 
-                          ["LLM BASIC", "LLM RAG"])
+demo = gr.TabbedInterface([basic_interface, rag_interface, agent_interface], 
+                          ["LLM BASIC", "LLM RAG","LLM AGENT"])
 
 # Launch the application
-if _name_ == "_main_":
+if __name__ == "__main__":
     demo.launch(share=True)
